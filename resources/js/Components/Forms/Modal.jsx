@@ -3,7 +3,7 @@ import { Button, CloseButton, Dialog, Portal } from "@chakra-ui/react"
 export function Modal({trigger, title, onSubmit, role = 'dialog', children, ...rest}) {
     return <Dialog.Root role={role} {...rest}>
         <Dialog.Trigger asChild>
-            {trigger}
+            {trigger ? trigger : ''}
         </Dialog.Trigger>
         <Portal>
             <Dialog.Backdrop />
@@ -18,9 +18,13 @@ export function Modal({trigger, title, onSubmit, role = 'dialog', children, ...r
                     </Dialog.Body>
                     {onSubmit ? <Dialog.Footer>
                         <Dialog.ActionTrigger asChild>
-                            <Button variant="outline">Cancel</Button>
+                            <Button variant="outline">
+                                {role === 'alertdialog' ? 'No' : 'Cancel'}
+                            </Button>
                         </Dialog.ActionTrigger>
-                        <Button type="submit" colorPalette={role === 'alertdialog' ? 'red' : 'bg.solid'}>Save</Button>
+                        <Button type="submit" colorPalette={role === 'alertdialog' ? 'red' : 'bg.solid'}>
+                            {role === 'alertdialog' ? 'Yes' : 'Save'}
+                        </Button>
                     </Dialog.Footer> : ''}
                     <Dialog.CloseTrigger asChild>
                         <CloseButton size="sm" />

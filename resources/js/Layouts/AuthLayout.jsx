@@ -4,13 +4,13 @@ import {IoSkullOutline} from "react-icons/io5";
 export default function AuthLayout({title = 'Default', children}) {
     return <>
         <Head title={title} />
-        <div className="min-h-screen flex items-center justify-center w-full bg-slate-900">
-            <div className="w-[550px]">
+        <div className="min-h-screen py-5 lg:py-0 px-5 lg:px-0 flex lg:items-center justify-center w-full bg-slate-900">
+            <div className="w-full lg:w-[550px]">
                 <div className="mb-5 text-center">
-                    <div className="text-white text-[70px]">
+                    <div className="text-white text-[55px] lg:text-[70px]">
                         <IoSkullOutline className="mx-auto" />
                     </div>
-                    <div className="text-white text-[32px] uppercase">
+                    <div className="text-white text-[26px] lg:text-[32px] uppercase">
                         <span className="font-bold">Plafon</span>
                         <span className="font-thin">Management</span>
                     </div>
