@@ -55,7 +55,7 @@ export default function Main({sites}) {
         return {
             id: site.id,
             no: site.id,
-            name: site.name,
+            name: <Link href={`/sites/advanced/${site.id}`} className="text-blue-500 underline">{site.name}</Link>,
             domain: site.domain,
             invitation_codes: <InvitationListModal codes={site.invitations} />,
             active: <CustomBadge isActive={site.active} label={site.active ? 'active' : 'inactive'} />,

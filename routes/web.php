@@ -28,7 +28,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/sites/getInvitationCode', [\App\Http\Controllers\SiteController::class, 'generateInvitationCode']);
     Route::post('/sites/invitation-code', [\App\Http\Controllers\SiteController::class, 'invitationCreate']);
 
+    Route::get('/sites/advanced/{id}', [\App\Http\Controllers\SiteController::class, 'advanced']);
+
     Route::get('/sheeps', [\App\Http\Controllers\SheepController::class, 'index']);
+
+    Route::get('/broadcast', [\App\Http\Controllers\MessageController::class, 'index']);
+    Route::get('/broadcast/create/email', [\App\Http\Controllers\MessageController::class, 'emailBroadcast']);
 
     Route::match(['get','post'],'/users', [\App\Http\Controllers\UserController::class, 'index']);
     Route::put('/users/{id}', [\App\Http\Controllers\UserController::class, 'update']);
@@ -38,6 +43,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])
         ->name('logout');
 });
+
+Route::get('/telebot', [\App\Http\Controllers\BotController::class, 'index']);
+Route::get('/whatsapp', [\App\Http\Controllers\BotController::class, 'whatsapp']);
+Route::post('/whatsapp', [\App\Http\Controllers\BotController::class, 'whatsappStore']);
+Route::match(['get','post'],'/wa-fonnte', [\App\Http\Controllers\BotController::class, 'wa_fonnte']);
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

@@ -128,6 +128,15 @@ class SiteController extends Controller
             ]);
     }
 
+    public function advanced(Request $request)
+    {
+        $data['site'] = Site::where('id', $request->id)
+            ->get()
+            ->first();
+
+        return inertia('Sites/Advanced', $data);
+    }
+
     private function codeIsValid($valid_start, $valid_end) {
         $now = Carbon::now()->tzName;
         $start = Carbon::createFromFormat('Y-m-d H:i:s', $valid_start);

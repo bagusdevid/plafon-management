@@ -4,7 +4,7 @@ export const LayoutContext = createContext();
 
 export default function Layout({children}) {
 
-    console.log(children.props)
+    // console.log(children.props)
 
     return <LayoutContext.Provider value={{
         auth: children.props.auth,

@@ -186,27 +186,21 @@ function FormModal({dataForm, onSubmit, isEdit, onGenerateCode, onExit, trigger}
                     {dataForm.errors.email ? <Field.ErrorText>{dataForm.errors.email}</Field.ErrorText> : ''}
                 </div>
             </CustomField>
-            {isEdit ? '' : <CustomField label="Password" orientation="horizontal" invalid={dataForm.errors.password}>
+            {isEdit ? '' : <Field.Root orientation="horizontal" invalid={dataForm.errors.password}>
+                <Field.Label>
+                    Password <button type="button" onClick={onGenerateCode}><IoMdRefresh /></button>
+                </Field.Label>
                 <div className="flex-1">
-                    <Group attached w="full" maxW="sm">
-                        <Button
-                            onClick={onGenerateCode}
-                            type="button"
-                            variant="solid"
-                            className="bg-slate-700"
-                        >
-                            <IoMdRefresh />
-                        </Button>
                         <Input
                             value={dataForm.data.password}
                             onChange={(e) => dataForm.setData('password', e.target.value)}
+                            type="password"
                             flex="1"
                             placeholder="Enter password"
                         />
-                    </Group>
                     {dataForm.errors.password ? <Field.ErrorText>{dataForm.errors.password}</Field.ErrorText> : ''}
                 </div>
-            </CustomField>}
+            </Field.Root>}
             <CustomField label="Active" orientation="horizontal">
                 <div className="flex-1">
                     <Checkbox.Root
