@@ -1,20 +1,25 @@
 import AppLayout from "@/Layouts/AppLayout.jsx";
 import PageTitle from "@/Components/PageTitle.jsx";
-import {useMemo, useState} from "react";
+import {useContext, useMemo, useState} from "react";
 import {Badge, Button, Field, Group, Checkbox, Input, Stack} from "@chakra-ui/react";
 import {Link, useForm} from "@inertiajs/react";
-import {FaEdit, FaPlus, FaTrashAlt} from "react-icons/fa";
+import {FaKey, FaPenToSquare, FaPlus, FaRegTrashCan} from "react-icons/fa6";
 import DataTable from "react-data-table-component";
 import dataTable from "@/Utils/dataTable";
 import {CustomField, Modal} from "@/Components/Forms/index.jsx";
 import {IoMdRefresh} from "react-icons/io";
+import {MdOutlineRestore, MdRestore} from "react-icons/md";
+import {LayoutContext} from "@/Layouts/Layout.jsx";
 
-function Action({onEdit, itemDelete}) {
+function Action({isCurrentUser, onEdit, itemDelete}) {
     return <div className="flex gap-3">
-        <button onClick={onEdit} className="cursor-pointer">
-            <FaEdit />
+        <button className="cursor-pointer" title="Reset password">
+            <FaKey />
         </button>
-        <Delete item={itemDelete} />
+        <button onClick={onEdit} className="cursor-pointer" title="Edit">
+            <FaPenToSquare />
+        </button>
+        {!isCurrentUser ? <Delete item={itemDelete} /> : ''}
     </div>
 }
 
@@ -26,12 +31,14 @@ export default function Main({users}) {
 
     // console.log(users)
 
+    const {auth} = useContext(LayoutContext)
+
     const columns = [
         {name: '', cell: (row, index) => index + 1, grow: 0, width: '60px'},
         {name: 'Name', selector: row => row.name, sortable: true, width: '240px'},
         {name: 'Email', selector: row => row.email, sortable: true},
         {name: 'Active', selector: row => row.active, sortable: true},
-        {name: '', selector: row => row.action, width: '90px'},
+        {name: '', selector: row => row.action, width: '160px'},
     ];
 
     const mapped = users.map(user => {
@@ -42,6 +49,7 @@ export default function Main({users}) {
             email: user.email,
             active: <Active isActive={user.active} />,
             action: <Action
+                isCurrentUser={auth.user.id === user.id}
                 onEdit={() => handleEdit(user)}
                 itemDelete={user}
             />
@@ -224,7 +232,7 @@ function Delete({item}) {
 
     return <Modal
         title="Delete"
-        trigger={<Button type="button" unstyled className="cursor-pointer"><FaTrashAlt /></Button>}
+        trigger={<Button type="button" unstyled className="cursor-pointer text-red-700"><FaRegTrashCan /></Button>}
         size="xs"
         role="alertdialog"
         open={open}

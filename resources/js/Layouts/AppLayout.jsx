@@ -1,4 +1,4 @@
-import {Head} from "@inertiajs/react";
+import {Head, Link} from "@inertiajs/react";
 import {AppLogo, MainMenu} from "@/Components/Sidebar/index.jsx";
 import {FaBars, FaRegCircleUser} from "react-icons/fa6";
 import { Button, Menu, Portal } from "@chakra-ui/react"
@@ -58,7 +58,7 @@ export default function AppLayout({title = 'Default', children}) {
 }
 
 function RightMenu({label}) {
-    return <Menu.Root>
+    return <Menu.Root positioning={{ placement: "bottom-end" }}>
         <Menu.Trigger asChild>
             <Button size="sm" colorPalette="gray" variant="surface">
                 <FaRegCircleUser /> {label}
@@ -68,12 +68,24 @@ function RightMenu({label}) {
             <Menu.Positioner>
                 <Menu.Content>
                     <Menu.ItemGroup>
-                        <Menu.Item value="new-txt">Profile</Menu.Item>
-                        <Menu.Item value="new-txt2">Change Password</Menu.Item>
+                        <Menu.Item value="/profile">
+                            <Link href="/profile">
+                                Profile
+                            </Link>
+                        </Menu.Item>
+                        <Menu.Item value="/chang-password">
+                            <Link href="/change-password">
+                                Change Password
+                            </Link>
+                        </Menu.Item>
                     </Menu.ItemGroup>
                     <Menu.Separator />
                     <Menu.ItemGroup>
-                        <Menu.Item value="export">Logout</Menu.Item>
+                        <Menu.Item value="export">
+                            <Link href="/logout" method="post" as="button">
+                                Logout
+                            </Link>
+                        </Menu.Item>
                     </Menu.ItemGroup>
                 </Menu.Content>
             </Menu.Positioner>

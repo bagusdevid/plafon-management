@@ -7,6 +7,7 @@ import {
     Stack,
 } from "@chakra-ui/react"
 import {Link, useForm} from "@inertiajs/react";
+import {CustomField} from "@/Components/Forms/CustomField.jsx";
 
 export default function Login() {
 
@@ -24,8 +25,7 @@ export default function Login() {
         <Fieldset.Root size="lg">
             <form onSubmit={handleSubmit}>
                 <Fieldset.Content>
-                    <Field.Root invalid={dataForm.errors.email}>
-                        <Field.Label>Email</Field.Label>
+                    <CustomField label="Email" invalid={dataForm.errors.email} isRequired>
                         <Input
                             value={dataForm.data.email}
                             onChange={(e) => dataForm.setData('email', e.target.value)}
@@ -34,9 +34,8 @@ export default function Login() {
                             placeholder="Masukkan email Anda"
                             className="w-full" />
                         {dataForm.errors.email ? <Field.ErrorText>{dataForm.errors.email}</Field.ErrorText> : ''}
-                    </Field.Root>
-                    <Field.Root invalid={dataForm.errors.password}>
-                        <Field.Label>Password</Field.Label>
+                    </CustomField>
+                    <CustomField label="Password" invalid={dataForm.errors.password} isRequired>
                         <Input
                             value={dataForm.data.password}
                             onChange={(e) => dataForm.setData('password', e.target.value)}
@@ -44,13 +43,20 @@ export default function Login() {
                             size="xl"
                             placeholder="Masukkan password" />
                         {dataForm.errors.password ? <Field.ErrorText>{dataForm.errors.password}</Field.ErrorText> : ''}
-                    </Field.Root>
+                    </CustomField>
                 </Fieldset.Content>
 
                 <Stack mt={5}>
                     <Button
                         size="xl"
-                        type="submit" alignSelf="flex-start" className="w-full">
+                        type="submit" alignSelf="flex-start" className="w-full"
+                        _disabled={{
+                            bgColor: "#ddd",
+                            color: "#aaa",
+                            opacity: 1
+                        }}
+                        disabled={dataForm.processing}
+                    >
                         Login
                     </Button>
                     <div className="flex justify-between">

@@ -137,6 +137,17 @@ class SiteController extends Controller
         return inertia('Sites/Advanced', $data);
     }
 
+    public function getInvitationCodes(Request $request)
+    {
+        $query = SiteInvitation::where('site_id', $request->site_id)
+            ->get();
+
+        return response()
+            ->json([
+                'results' => $query
+            ]);
+    }
+
     private function codeIsValid($valid_start, $valid_end) {
         $now = Carbon::now()->tzName;
         $start = Carbon::createFromFormat('Y-m-d H:i:s', $valid_start);

@@ -34,11 +34,23 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/broadcast', [\App\Http\Controllers\MessageController::class, 'index']);
     Route::get('/broadcast/create/email', [\App\Http\Controllers\MessageController::class, 'emailBroadcast']);
+    Route::post('/broadcast/store/email', [\App\Http\Controllers\MessageController::class, 'emailStore']);
+
+    Route::get('/broadcast/create/whatsapp', [\App\Http\Controllers\MessageController::class, 'waBroadcast']);
+
+    Route::get( '/tasks', [\App\Http\Controllers\TaskController::class, 'index']);
+    Route::match(['get','post'], '/tasks/create', [\App\Http\Controllers\TaskController::class, 'create']);
+    Route::get('/tasks/edit/{id}', [\App\Http\Controllers\TaskController::class, 'edit']);
 
     Route::match(['get','post'],'/users', [\App\Http\Controllers\UserController::class, 'index']);
     Route::put('/users/{id}', [\App\Http\Controllers\UserController::class, 'update']);
     Route::delete('/users/{user}', [\App\Http\Controllers\UserController::class, 'destroy']);
     Route::post('/users/random-passwd', [\App\Http\Controllers\UserController::class, 'randomPassword']);
+
+    Route::match(['get','put'],'/profile', [\App\Http\Controllers\UserController::class, 'profile']);
+    Route::match(['get','post'],'/change-password', [\App\Http\Controllers\UserController::class, 'changePassword']);
+
+    Route::post('/api/sites/getInvitationCodes', [\App\Http\Controllers\SiteController::class, 'getInvitationCodes']);
 
     Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout'])
         ->name('logout');

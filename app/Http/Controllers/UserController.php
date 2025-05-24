@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Site;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
@@ -69,5 +71,45 @@ class UserController extends Controller
             ->json([
                 'results' => $code
             ]);
+    }
+
+    public function profile(Request $request)
+    {
+        if($request->isMethod('put')) {
+            $request->validate([
+                'name' => ['required'],
+                'email' => ['required', 'email']
+            ]);
+
+            User::where('id', Auth::user()['id'])
+                ->update([
+                    'name' => $request->name,
+                    'email' => $request->email
+                ]);
+
+            return back()
+                ->with('message', 'Data successfully updated');
+        }
+
+        return inertia('User/Profile');
+    }
+
+    public function changePassword(Request $request)
+    {
+        if($request->isMethod('post')) {
+            $validated = $request->validate([
+                'current_password' => ['required', 'current_password'],
+                'password' => ['required', Password::defaults(), 'confirmed'],
+            ]);
+
+            $request->user()->update([
+                'password' => Hash::make($validated['password']),
+            ]);
+
+            return back()
+                ->with('message', 'Data successfully updated');
+        }
+
+        return inertia('User/ChangePassword');
     }
 }

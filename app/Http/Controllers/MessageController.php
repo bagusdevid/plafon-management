@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\BroadcastMail;
+use App\Models\Site;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -10,12 +11,15 @@ class MessageController extends Controller
 {
     public function index()
     {
+
         return inertia('Message/Main');
     }
 
     public function emailBroadcast()
     {
-        return inertia('Message/CreateEmail');
+        $data['sites'] = Site::orderBy('name', 'ASC')
+            ->get();
+        return inertia('Message/CreateEmail', $data);
     }
 
     public function emailStore(Request $request)
@@ -31,5 +35,10 @@ class MessageController extends Controller
 
         return back()
             ->with('message', 'Email successfully sent.');
+    }
+
+    public function waBroadcast()
+    {
+        return inertia('Message/CreatePhone');
     }
 }

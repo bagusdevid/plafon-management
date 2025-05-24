@@ -5,6 +5,7 @@ import {Link, usePage} from "@inertiajs/react";
 import {PiDog, PiDogBold} from "react-icons/pi";
 import {IoChevronDown, IoChevronForward} from "react-icons/io5";
 import {useState} from "react";
+import {GoTasklist} from "react-icons/go";
 
 export function MainMenu() {
 
@@ -21,6 +22,7 @@ export function MainMenu() {
                 {label: 'Broadcast', url: '/broadcast'},
             ]},
         {label: 'Sites', url: '/sites', icon: <FaSitemap />, method: 'get', children: []},
+        {label: 'Tasks', url: '/tasks', icon: <GoTasklist />, method: 'get', children: []},
         {label: 'Users', url: '/users', icon: <HiUsers />, method: 'get', children: []},
         {label: 'Logout', url: '/logout', icon: <MdLogout />, method: 'post', children: []},
     ]
