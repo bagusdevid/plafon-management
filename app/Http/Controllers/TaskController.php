@@ -117,7 +117,7 @@ class TaskController extends Controller
         return inertia('Task/Edit', $data);
     }
 
-    private function uploadMap($random, $upload, $path)
+    public function uploadMap($random, $upload, $path)
     {
         $ext = $upload->getClientOriginalExtension();
 
@@ -133,7 +133,7 @@ class TaskController extends Controller
         return;
     }
 
-    private function uploadImage($img, $filename, $upload)
+    public function uploadImage($img, $filename, $upload)
     {
         return Storage::put($filename, $img->encodeByExtension($upload->getClientOriginalExtension()));
     }

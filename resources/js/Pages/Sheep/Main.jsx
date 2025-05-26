@@ -5,15 +5,19 @@ import {FaEdit, FaTrashAlt} from "react-icons/fa";
 import {Input} from "@chakra-ui/react";
 import DataTable from "react-data-table-component";
 import dataTable from "@/Utils/dataTable.js";
+import DeleteModal from "@/Components/DeleteModal.jsx";
+import {FaRegFileLines} from "react-icons/fa6";
+import thousandSeparator from "@/Utils/thousand-separator.js";
 
-function Action() {
+function Action({item, deleteUrl, onDetail}) {
     return <div className="flex gap-3">
+        <button onClick={onDetail} className="cursor-pointer" title="Edit">
+            <FaRegFileLines />
+        </button>
         <button className="cursor-pointer">
             <FaEdit />
         </button>
-        <button className="cursor-pointer">
-            <FaTrashAlt />
-        </button>
+        <DeleteModal label={`${item.name} (${item.username})`} id={item.id} url={deleteUrl} />
     </div>
 }
 
@@ -21,9 +25,10 @@ export default function Sheep({sheeps}) {
 
     const columns = [
         {name: '', cell: (row, index) => index + 1, grow: 0, width: '60px'},
-        {name: 'Name', selector: row => row.name, sortable: true},
-        {name: 'Email', selector: row => row.email, sortable: true},
-        {name: 'Phone', selector: row => row.phone, sortable: true},
+        {name: 'Username', selector: row => row.username, sortable: true},
+        {name: 'Nama lengkap', selector: row => row.name, sortable: true},
+        {name: 'Saldo', selector: row => row.balance, sortable: true},
+        {name: 'Kredit', selector: row => row.credit, sortable: true},
         {name: '', selector: row => row.action, width: '140px'},
     ];
 
@@ -31,10 +36,15 @@ export default function Sheep({sheeps}) {
         return {
             id: sheep.id,
             no: sheep.id,
+            username: sheep.username,
             name: sheep.name,
-            email: sheep.email,
-            phone: sheep.phone,
-            action: <Action />
+            balance: thousandSeparator(sheep.balance),
+            credit: sheep.credit,
+            action: <Action
+                item={sheep}
+                deleteUrl={`/sheep/${sheep.id}`}
+                onDetail={() => handleDetail(sheep)}
+            />
         }
     })
 
@@ -46,6 +56,10 @@ export default function Sheep({sheeps}) {
             return searchableValues.includes(filterText.toLowerCase());
         });
     }, [mapped, filterText]);
+
+    const handleDetail = (sheep) => {
+
+    }
 
     return <AppLayout title="Sheeps">
         <PageTitle>
@@ -68,12 +82,14 @@ export default function Sheep({sheeps}) {
             </div>
         </div>
 
-        <DataTable
-            columns={columns}
-            data={filteredItems}
-            persistTableHead
-            pagination
-            customStyles={dataTable.customStyle}
-        />
+        <div className="border border-solid border-neutral-300">
+            <DataTable
+                columns={columns}
+                data={filteredItems}
+                persistTableHead
+                pagination
+                customStyles={dataTable.customStyle}
+            />
+        </div>
     </AppLayout>
 }

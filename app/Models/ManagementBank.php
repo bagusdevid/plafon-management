@@ -5,18 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Sheep extends Model
+class ManagementBank extends Model
 {
     use HasFactory;
 
-    protected $table = 'sheeps';
+    protected $table = 'management_banks';
 
     protected $fillable = [
-        'name',
-        'email',
-        'username',
-        'balance',
-        'credit',
-        'phone'
+        'bank_name',
+        'bank_acc_no',
+        'bank_acc_name',
+        'created_by'
     ];
 }

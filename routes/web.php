@@ -42,6 +42,13 @@ Route::middleware('auth')->group(function () {
     Route::match(['get','post'], '/tasks/create', [\App\Http\Controllers\TaskController::class, 'create']);
     Route::get('/tasks/edit/{id}', [\App\Http\Controllers\TaskController::class, 'edit']);
 
+    Route::get( '/topup', [\App\Http\Controllers\TopupController::class, 'index']);
+    Route::match(['post','get'],'/topup/create', [\App\Http\Controllers\TopupController::class, 'create']);
+
+    Route::match(['post','get'],'/setting/bank', [\App\Http\Controllers\SettingController::class, 'bank']);
+    Route::put('/setting/bank/{id}', [\App\Http\Controllers\SettingController::class, 'updateBank']);
+    Route::delete('/setting/bank/{managementBank}', [\App\Http\Controllers\SettingController::class, 'destroyBank']);
+
     Route::match(['get','post'],'/users', [\App\Http\Controllers\UserController::class, 'index']);
     Route::put('/users/{id}', [\App\Http\Controllers\UserController::class, 'update']);
     Route::delete('/users/{user}', [\App\Http\Controllers\UserController::class, 'destroy']);
