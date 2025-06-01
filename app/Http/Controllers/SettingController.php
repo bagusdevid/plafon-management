@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ManagementBank;
+use App\Models\ManagementCS;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -57,6 +58,54 @@ class SettingController extends Controller
     public function destroyBank(ManagementBank $managementBank)
     {
         $managementBank->delete();
+
+        return back()
+            ->with('message', 'Data successfully deleted.');
+    }
+
+    public function cs(Request $request)
+    {
+        if($request->isMethod('post')) {
+            $request->validate([
+                'service' => ['required'],
+                'account' => ['required'],
+            ]);
+
+            ManagementCS::create([
+                'service' => $request->service,
+                'account' => $request->account
+            ]);
+
+            return back()
+                ->with('message', 'Data successfully added.');
+        }
+
+        $data['customer_service'] = ManagementCS::orderByDesc('id')
+            ->get();
+
+        return inertia('Setting/CS', $data);
+    }
+
+    public function updateCS(Request $request, ManagementCS $managementCS)
+    {
+        $request->validate([
+            'service' => ['required'],
+            'account' => ['required'],
+        ]);
+
+        $managementCS::where('id', $request->id)
+            ->update([
+                'service' => $request->service,
+                'account' => $request->account
+            ]);
+
+        return back()
+            ->with('message', 'Data successfully updated.');
+    }
+
+    public function destroyCS(ManagementCS $managementCS)
+    {
+        $managementCS->delete();
 
         return back()
             ->with('message', 'Data successfully deleted.');

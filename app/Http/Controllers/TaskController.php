@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Site;
 use App\Models\Task;
 use App\Models\TaskOption;
+use App\Models\TaskPlayed;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -56,6 +57,7 @@ class TaskController extends Controller
             $task = Task::create([
                 'site_id' => $request->site_id,
                 'name' => $request->name,
+                'time_limit' => $request->time_limit,
                 'photo' => $random . '.' . $upload->getClientOriginalExtension(),
                 'thumbs_inside' => implode(',',$thumbs_inside)
             ]);
@@ -66,7 +68,8 @@ class TaskController extends Controller
                     $data_options[] = [
                         'task_id' => $task->id,
                         'icon' => $option['icon'],
-                        'label' => $option['label']
+                        'label' => $option['label'],
+                        'cost' => $option['cost'],
                     ];
                 }
                 TaskOption::insert($data_options);
@@ -117,6 +120,77 @@ class TaskController extends Controller
         return inertia('Task/Edit', $data);
     }
 
+    public function update(Request $request)
+    {
+//        dd($request->all());
+        $random = Str::random();
+
+        $query = Task::where('id', $request->id)
+            ->with('options')
+            ->with('site')->has('site')
+            ->get()
+            ->first();
+
+        $validate = [
+            'name' => ['required'],
+            'time_limit' => ['required'],
+        ];
+        $data_update = [
+            'site_id' => $request->site_id,
+            'name' => $request->name,
+            'time_limit' => $request->time_limit,
+        ];
+
+        if($request->file('photo')) {
+            $validate['photo'] = 'mimes:jpg,jpeg,gif,png|max:2048';
+            $upload = $request->file('photo');
+            $this->uploadMap($random, $upload, 'tasks/');
+            $this->deletePhoto($query->photo);
+            $data_update['photo'] = $random . '.' . $upload->getClientOriginalExtension();
+        }
+
+        $request->validate($validate);
+
+        Task::where('id', $request->id)
+            ->update($data_update);
+
+        if(count($request->options) > 0) {
+            foreach ($request->options as $option) {
+                if($option['id'] > 0) {
+                    TaskOption::where('id', $option['id'])
+                        ->update([
+                            'label' => $option['label'],
+                            'cost' => $option['cost'],
+                        ]);
+                } else {
+                    TaskOption::create([
+                        'label' => $option['label'],
+                        'cost' => $option['cost'],
+                    ]);
+                }
+            }
+        }
+
+        return redirect()
+            ->to('/tasks')
+            ->with('message', 'Data successfully updated.');
+
+//        return response()
+//            ->json([
+//                'data' => $request->all()
+//            ]);
+    }
+
+    private function deletePhoto($photo)
+    {
+        if(Storage::exists('tasks/' . $photo)) {
+            $filenames = explode('.', $photo);
+            Storage::delete('tasks/' . $photo);
+            Storage::delete('tasks/' . $filenames[0] . '_thumb.' . $filenames[1]);
+            Storage::delete('tasks/' . $filenames[0] . '_std.' . $filenames[1]);
+        }
+    }
+
     public function uploadMap($random, $upload, $path)
     {
         $ext = $upload->getClientOriginalExtension();
@@ -136,5 +210,20 @@ class TaskController extends Controller
     public function uploadImage($img, $filename, $upload)
     {
         return Storage::put($filename, $img->encodeByExtension($upload->getClientOriginalExtension()));
+    }
+
+    public function played()
+    {
+        $data['plays'] = TaskPlayed::orderByDesc('id')
+            ->with('sheep')->has('sheep')
+            ->with('task')
+            ->get()
+            ->map(function ($item) {
+                $item->bet_decode = json_decode($item->bet);
+                $item->bet_options_decode = json_decode($item->bet_options);
+                return $item;
+            });
+
+        return inertia('Task/Played', $data);
     }
 }

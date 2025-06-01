@@ -6,7 +6,7 @@ import {useForm} from "@inertiajs/react";
 import {HiUpload} from "react-icons/hi";
 import {IoMdClose} from "react-icons/io";
 import {useRef, useState} from "react";
-import {FaKey, FaPlaneDeparture, FaRegPaperPlane} from "react-icons/fa6";
+import {FaKey, FaPlaneDeparture, FaPlus, FaRegPaperPlane} from "react-icons/fa6";
 import {IoGlobeOutline} from "react-icons/io5";
 
 export default function Create({sites}) {
@@ -14,6 +14,7 @@ export default function Create({sites}) {
     const initialValues = {
         site_id: '',
         name: '',
+        time_limit: '',
         photo: '',
         thumbs_inside: [],
         options: [],
@@ -24,11 +25,13 @@ export default function Create({sites}) {
     const [addOptionOpen, setAddOptionOpen] = useState(false)
 
     const optionRef = useRef('')
+    const costRef = useRef('')
     const handleAddOption = () => {
         // console.log(optionRef.current.value)
-        if(optionRef.current.value) {
-            dataForm.setData('options', [...dataForm.data.options, {icon: '', label: optionRef.current.value}])
+        if(optionRef.current.value && costRef.current.value) {
+            dataForm.setData('options', [...dataForm.data.options, {icon: '', label: optionRef.current.value, cost: costRef.current.value}])
             optionRef.current.value = '';
+            costRef.current.value = '';
             setAddOptionOpen(false)
         }
     }
@@ -98,6 +101,18 @@ export default function Create({sites}) {
                             {dataForm.errors.name ? <Field.ErrorText>{dataForm.errors.name}</Field.ErrorText> : ''}
                         </div>
                     </CustomField>
+                    <CustomField label="Time limit" orientation="horizontal" invalid={dataForm.errors.time_limit} isRequired>
+                        <div className="flex-1">
+                            <Input
+                                value={dataForm.data.time_limit}
+                                onChange={(e) => dataForm.setData('time_limit', e.target.value)}
+                                bg="white"
+                                type="number"
+                                placeholder="Enter time limit"
+                            />
+                            {dataForm.errors.time_limit ? <Field.ErrorText>{dataForm.errors.time_limit}</Field.ErrorText> : ''}
+                        </div>
+                    </CustomField>
                     <CustomField
                         className="items-start"
                         label="Photo" orientation="horizontal" invalid={dataForm.errors.photo} isRequired>
@@ -161,6 +176,7 @@ export default function Create({sites}) {
                             </div>
                             {addOptionOpen ? <div className="border border-solid border-neutral-300 px-2 py-2 mb-2">
                                 <Input ref={optionRef} placeholder="Masukkan pilihan" className="mb-1 bg-white" />
+                                <Input type="number" ref={costRef} placeholder="Masukkan harga/biaya" className="mb-1 bg-white" />
                                 <div>
                                     <Button
                                         onClick={handleAddOption}
@@ -185,6 +201,7 @@ export default function Create({sites}) {
                                 bg="white"
                                 disabled={addOptionOpen}
                             >
+                                <FaPlus />
                                 Add option
                             </Button>
                         </div>

@@ -13,6 +13,7 @@ class Task extends Model
     protected $fillable = [
         'site_id',
         'name',
+        'time_limit',
         'photo',
         'thumbs_inside'
     ];

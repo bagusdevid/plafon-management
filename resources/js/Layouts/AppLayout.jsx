@@ -42,7 +42,7 @@ export default function AppLayout({title = 'Default', children}) {
                 <AppLogo />
                 <MainMenu />
             </div>
-            <div className="fixed right-0 top-0 flex justify-between items-center px-5 h-[55px] w-full lg:w-[calc(100%_-_300px)] bg-neutral-100 border-b border-solid border-b-neutral-300">
+            <div className="fixed z-10 right-0 top-0 flex justify-between items-center px-5 h-[55px] w-full lg:w-[calc(100%_-_300px)] bg-neutral-100 border-b border-solid border-b-neutral-300">
                 <div>
                     <FaBars />
                 </div>

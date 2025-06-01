@@ -23,7 +23,10 @@ export function MainMenu() {
                 {label: 'All Sheeps', url: '/sheeps'},
                 {label: 'Broadcast', url: '/broadcast'},
             ]},
-        {label: 'Tasks', url: '/tasks', icon: <GoTasklist />, method: 'get', children: []},
+        {label: 'Tasks', url: '#', icon: <GoTasklist />, method: 'get', children: [
+                {label: 'All Tasks', url: '/tasks'},
+                {label: 'Task played', url: '/tasks/played'},
+            ]},
         {label: 'Topup', url: '#', icon: <IoReload />, method: 'get', children: [
                 {label: 'Topup baru', url: '/topup/create'},
                 {label: 'Daftar topup', url: '/topup'},
@@ -32,6 +35,7 @@ export function MainMenu() {
         {label: 'Users', url: '/users', icon: <HiUsers />, method: 'get', children: []},
         {label: 'Setting', url: '#', icon: <IoMdSettings />, method: 'get', children: [
                 {label: 'Rekening management', url: '/setting/bank'},
+                {label: 'Customer service', url: '/setting/customer-service'},
             ]},
         {label: 'Logout', url: '/logout', icon: <MdLogout />, method: 'post', children: []},
     ]
@@ -68,9 +72,9 @@ export function MainMenu() {
                         <Accordion.ItemBody className="py-0">
                             <ul className="">
                                 {item.children.map((child, k) => {
-                                    return <li key={k}>
+                                    return <li key={k} className="mb-1">
                                         <Link href={child.url}
-                                              className="block pl-10 pr-5 py-1 rounded-md hover:bg-slate-800">
+                                              className={`block pl-10 pr-5 py-1 ${inertiaUrl === child.url ? 'bg-slate-800 text-white' : ''} rounded-md hover:bg-slate-800`}>
                                             {child.label}
                                         </Link>
                                     </li>
@@ -132,7 +136,7 @@ export function MainMenu() {
 
 function LinkItem({child, url, icon, label, inertiaUrl}) {
     if(child.length > 0) {
-        return <div className="flex gap-2 items-center py-2 w-full cursor-pointer rounded-md hover:bg-slate-800 px-3">
+        return <div className={`flex gap-2 items-center py-2 w-full cursor-pointer rounded-md hover:bg-slate-800 px-3`}>
             <div>
                 {icon}
             </div>
@@ -143,7 +147,7 @@ function LinkItem({child, url, icon, label, inertiaUrl}) {
         </div>
     }
 
-    return <Link href={url} className={`flex gap-2 items-center py-2 w-full rounded-md ${inertiaUrl === url ? 'bg-slate-800' : ''} hover:bg-slate-800 px-3`}>
+    return <Link href={url} className={`flex gap-2 items-center py-2 w-full rounded-md ${inertiaUrl === url ? 'bg-slate-800 text-white' : ''} hover:bg-slate-800 px-3`}>
         <div>
             {icon}
         </div>

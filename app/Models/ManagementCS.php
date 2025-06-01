@@ -5,18 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TaskOption extends Model
+class ManagementCS extends Model
 {
     use HasFactory;
 
-    protected $table = 'task_options';
-
-    public $timestamps = false;
+    protected $table = 'management_cs';
 
     protected $fillable = [
-        'task_id',
-        'icon',
-        'label',
-        'cost'
+        'service',
+        'account',
     ];
 }
